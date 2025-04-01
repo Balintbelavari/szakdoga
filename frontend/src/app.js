@@ -8,8 +8,10 @@ function App() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handlePredict = async () => {
-    if (!message.trim()) {
+  const handlePredict = async (inputMessage) => {
+    const text = inputMessage || message; // Use the provided example or typed input
+
+    if (!text.trim()) {
       setError("Error: Message cannot be empty");
       return;
     }
@@ -18,12 +20,13 @@ function App() {
       setError("");
       setPrediction("");
       setLoading(true);
+      setMessage(text); // Set message state for example buttons
       const response = await fetch(
         "https://lc-security-backend-d51e9de3f86b.herokuapp.com/predict",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message }),
+          body: JSON.stringify({ message: text }),
         }
       );
 
@@ -59,15 +62,15 @@ function App() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type something here..."
-          rows="1" // Default to 1 row
+          rows="1"
           style={{
-            height: "32px", // Default height
-            minHeight: "20px", // Ensures single-row height
+            height: "32px",
+            minHeight: "20px",
             maxHeight: "160px",
             overflowY: "auto",
           }}
           onInput={(e) => {
-            e.target.style.height = "20px"; // Reset before recalculating
+            e.target.style.height = "20px";
             if (e.target.scrollHeight > 20) {
               e.target.style.height =
                 Math.min(e.target.scrollHeight, 160) + "px";
@@ -80,7 +83,7 @@ function App() {
             }
           }}
         />
-        <button onClick={handlePredict} disabled={loading}>
+        <button onClick={() => handlePredict()} disabled={loading}>
           Check
         </button>
       </div>
@@ -91,6 +94,30 @@ function App() {
         </p>
       )}
       {error && <p className="error">{error}</p>}
+
+      {/* Example Messages Section */}
+      <div className="example-container">
+        <p className="example-title">Try these:</p>
+        <div className="example-buttons">
+          <button
+            className="example-button"
+            onClick={() => handlePredict("Do you want to have lunch tomorrow?")}
+          >
+            Do you want to have lunch tomorrow?
+          </button>
+          <button
+            className="example-button"
+            onClick={() => handlePredict("Your membership expires in 10 days.")}
+          >
+            Your membership expires in 10 days.
+          </button>
+        </div>
+      </div>
+
+      {/* Version Section */}
+      <div className="version-container">
+        <p className="version-label">Model Version: 0.1.1</p>
+      </div>
     </div>
   );
 }

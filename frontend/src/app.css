@@ -3,6 +3,7 @@ body {
     padding: 0;
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background: linear-gradient(90deg, #2f2744, #634783);
@@ -17,6 +18,7 @@ body {
 .container {
     text-align: center;
     margin: auto;
+    flex: 1;
 }
 
 .header {
@@ -53,6 +55,7 @@ h1 {
     color: #f34674;
 }
 
+
 .input-container {
     display: flex;
     flex-direction: column;
@@ -68,10 +71,10 @@ h1 {
 /* Responsive adjustments */
 @media (max-width: 750px) { /* Phones */
     .input-container {
-        max-width: 80%;
+        width: 90%;
     }
     textarea {
-        max-width: 70%;
+        max-width: 80%;
     }
 }
 
@@ -117,4 +120,73 @@ button:hover {
 .error {
     margin-top: 20px;
     color: #f34674;
+}
+
+/* Example Buttons Section */
+.example-container {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 620px;
+    width: 100%; /* Ensure it takes up full width of the parent */
+}
+
+.example-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: white;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.example-buttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: stretch;  /* Stretch buttons to fill container width */
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.example-button {
+    background: none;
+    border: 2px solid white;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%; /* Make the button the same width as its parent container */
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+    text-align: center;
+    margin-bottom: 10px; /* Space between buttons */
+}
+
+.example-button:hover {
+    background: white;
+    color: #2f2744;
+}
+
+/* Responsive adjustments */
+@media (max-width: 750px) {
+    .example-button {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .example-container {
+        width: 90%;
+    }
+}
+
+.version-container {
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 600px;
+}
+
+.version-label {
+    font-size: 12px;
+    color: white;
+    text-align: center;
 }
