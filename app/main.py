@@ -24,7 +24,7 @@ collection = db["predictions"]
 
 # Google Sheets API setup
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-credentials = service_account.Credentials.from_service_account_file("lcsecurity-feb78c25475c.json", scope)
+credentials = service_account.Credentials.from_service_account_file("lcsecurity-feb78c25475c.json", scopes=scope)
 client_gs = gspread.authorize(creds)
 sheet = client_gs.open("mongodb_export").sheet1
 
