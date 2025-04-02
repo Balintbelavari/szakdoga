@@ -7,7 +7,7 @@ app/node_modules/
 *.log
 
 # Ignore environment variable files
-app/.env
+*.env
 app/.env.save
 
 # Ignore build directories
@@ -31,5 +31,5 @@ __pycache__/
 backend/__pycache__/
 backend/app/__pycache__
 
-# Ignore large file
-app/bert_large_spam_model/model.safetensors
+# Ignore Google Cloud Storage json key
+backend/app/lcsecurity-f65d3e4-7a0b-4f2c-8b5c-1f6a9d0e2a3b
