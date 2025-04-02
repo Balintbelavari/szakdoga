@@ -12,19 +12,31 @@ import os
 import pymongo # type: ignore
 import gspread # type: ignore
 from google.oauth2 import service_account # type: ignore
+import base64
+import json
+from cryptography.fernet import Fernet  # type: ignore
 
 # Load environment variables
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
-MONGO_URI = os.getenv("MONGO_URI")  # MongoDB connection URI
-client = AsyncIOMotorClient(MONGO_URI)
+secret_key = os.getenv("SECRET_KEY").encode() # Secret key for Fernet
+encrypted_mongo_uri = os.getenv("MONGO_URI_ENCRYPTED").encode()  # Encrypted Mongo URI
+fernet = Fernet(secret_key)
+mongo_uri = fernet.decrypt(encrypted_mongo_uri).decode()
+client = AsyncIOMotorClient(mongo_uri)
+
+google_credentials_base64 = os.getenv("GOOGLE_CREDENTIALS_BASE64") # Base64 encoded Google credentials
+google_credentials_json = base64.b64decode(google_credentials_base64).decode("utf-8")
+credentials_info = json.loads(google_credentials_json)
+credentials = service_account.Credentials.from_service_account_info(
+    credentials_info,
+    scopes=["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+)
 db = client["model_v0_1_1"]
 collection = db["predictions"]
 
 # Google Sheets API setup
-scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-credentials = service_account.Credentials.from_service_account_file("lcsecurity-feb78c25475c.json", scopes=scope)
 client_gs = gspread.authorize(credentials)
 sheet = client_gs.open("mongodb_export").sheet1
 
