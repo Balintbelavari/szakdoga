@@ -9,6 +9,11 @@ import joblib  # type: ignore
 from datetime import datetime
 from dotenv import load_dotenv  # type: ignore
 import os
+import time
+import pymongo # type: ignore
+import gspread # type: ignore
+import pandas as pd
+from oauth2client.service_account import ServiceAccountCredentials # type: ignore
 
 # Load environment variables
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -17,6 +22,13 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 MONGO_URI = os.getenv("MONGO_URI")  # MongoDB connection URI
 client = AsyncIOMotorClient(MONGO_URI)
 db = client["model_v0_1_1"]
+collection = db["predictions"]
+
+# Google Sheets API setup
+scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name("lcsecurity-f65f63473db7.json", scope)
+client_gs = gspread.authorize(creds)
+sheet = client_gs.open("mongodb_export").sheet1
 
 # Load model and vectorizer
 model = joblib.load(os.path.join(BASE_DIR, "model1.pkl"))
@@ -74,6 +86,12 @@ async def predict(message: Message):
             "timestamp": datetime.now().isoformat()
         }
         await db.predictions.insert_one(result)
+        
+        # Update Google Sheet
+        data = await collection.find({}, {"_id": 0, "message": 1, "prediction": 1}).to_list(length=None)
+        formatted_data = [["Message", "Prediction"]]  # Header row
+        new_row = [message.message, prediction]
+        sheet.append_row(new_row)
 
         return {"prediction": prediction}
     except Exception as e:
