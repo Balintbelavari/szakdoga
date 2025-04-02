@@ -32,4 +32,4 @@ backend/__pycache__/
 backend/app/__pycache__
 
 # Ignore Google Cloud Storage json key
-**/lcsecurity-f65d3e4-7a0b-4f2c-8b5c-1f6a9d0e2a3b
+**/lcsecurity-feb78c25475c.json
