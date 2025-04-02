@@ -9,15 +9,8 @@ import joblib  # type: ignore
 from datetime import datetime
 from dotenv import load_dotenv  # type: ignore
 import os
-<<<<<<< HEAD
-import time
 import pymongo # type: ignore
 import gspread # type: ignore
-import pandas as pd
-=======
-import pymongo # type: ignore
-import gspread # type: ignore
->>>>>>> live_spreadsheet
 from oauth2client.service_account import ServiceAccountCredentials # type: ignore
 
 # Load environment variables
@@ -31,11 +24,7 @@ collection = db["predictions"]
 
 # Google Sheets API setup
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-<<<<<<< HEAD
-creds = ServiceAccountCredentials.from_json_keyfile_name("lcsecurity-f65f63473db7.json", scope)
-=======
 creds = ServiceAccountCredentials.from_json_keyfile_name("lcsecurity-feb78c25475c.json", scope)
->>>>>>> live_spreadsheet
 client_gs = gspread.authorize(creds)
 sheet = client_gs.open("mongodb_export").sheet1
 
