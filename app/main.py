@@ -11,7 +11,7 @@ from dotenv import load_dotenv  # type: ignore
 import os
 import pymongo # type: ignore
 import gspread # type: ignore
-from oauth2client.service_account import ServiceAccountCredentials # type: ignore
+from google.oauth2 import service_account # type: ignore
 
 # Load environment variables
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -24,7 +24,7 @@ collection = db["predictions"]
 
 # Google Sheets API setup
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("lcsecurity-feb78c25475c.json", scope)
+credentials = service_account.Credentials.from_service_account_file("lcsecurity-feb78c25475c.json", scope)
 client_gs = gspread.authorize(creds)
 sheet = client_gs.open("mongodb_export").sheet1
 
