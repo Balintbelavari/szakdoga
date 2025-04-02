@@ -9,10 +9,8 @@ import joblib  # type: ignore
 from datetime import datetime
 from dotenv import load_dotenv  # type: ignore
 import os
-import time
 import pymongo # type: ignore
 import gspread # type: ignore
-import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials # type: ignore
 
 # Load environment variables
