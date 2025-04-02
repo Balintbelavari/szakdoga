@@ -25,7 +25,7 @@ collection = db["predictions"]
 # Google Sheets API setup
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 credentials = service_account.Credentials.from_service_account_file("lcsecurity-feb78c25475c.json", scopes=scope)
-client_gs = gspread.authorize(creds)
+client_gs = gspread.authorize(credentials)
 sheet = client_gs.open("mongodb_export").sheet1
 
 # Load model and vectorizer
@@ -104,3 +104,4 @@ async def shutdown():
 if __name__ == "__main__":
     import uvicorn  # type: ignore
     uvicorn.run(app, host="127.0.0.1", port=8001, reload=True)
+print("main.py ran successfully")
