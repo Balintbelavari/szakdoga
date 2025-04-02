@@ -27,9 +27,8 @@ mongo_uri = fernet.decrypt(encrypted_mongo_uri).decode()
 client = AsyncIOMotorClient(mongo_uri)
 
 google_credentials_base64 = os.getenv("GOOGLE_CREDENTIALS_BASE64") # Base64 encoded Google credentials
-google_credentials_json = base64.b64decode(google_credentials_base64) # Decode base64 into bytes
-credentials_info = json.loads(google_credentials_json.decode("utf-8"))  # Decode bytes to UTF-8 string, then load JSON
-print(credentials_info)
+google_credentials_json = base64.b64decode(google_credentials_base64).decode("utf-8") # Decode base64 into utf-8 string
+credentials_info = json.loads(google_credentials_json)
 credentials = service_account.Credentials.from_service_account_info(
     credentials_info,
     scopes=["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
