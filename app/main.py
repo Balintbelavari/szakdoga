@@ -26,23 +26,12 @@ fernet = Fernet(secret_key)
 mongo_uri = fernet.decrypt(encrypted_mongo_uri).decode()
 client = AsyncIOMotorClient(mongo_uri)
 
-google_credentials_base64 = os.getenv("GOOGLE_CREDENTIALS_BASE64") # Base64 encoded Google credentials
-google_credentials_json = base64.b64decode(google_credentials_base64).decode("utf-8") # Decode base64 into utf-8 string
-credentials_info = json.loads(google_credentials_json)
-credentials = service_account.Credentials.from_service_account_info(
-    credentials_info,
-    scopes=["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-)
-db = client["model_v0_1_1"]
+db = client["szakdolgozat"]  # MongoDB database
 collection = db["predictions"]
 
-# Google Sheets API setup
-client_gs = gspread.authorize(credentials)
-sheet = client_gs.open("mongodb_export").sheet1
-
 # Load model and vectorizer
-model = joblib.load(os.path.join(BASE_DIR, "model1.pkl"))
-vectorizer = joblib.load(os.path.join(BASE_DIR, "vectorizer1.pkl"))
+model = joblib.load(os.path.join(BASE_DIR, "model.pkl"))
+vectorizer = joblib.load(os.path.join(BASE_DIR, "vectorizer.pkl"))
 
 # FastAPI app
 app = FastAPI()
@@ -50,7 +39,7 @@ app = FastAPI()
 # ✅ Enable CORS for React frontend (localhost:3000 for development)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://lc-security-backend-d51e9de3f86b.herokuapp.com/", "http://127.0.0.1:8001/"],  # React dev server, heroku hosting
+    allow_origins=["http://localhost:3000", "https://szakdolgozat-nh9z.onrender.com/", "http://127.0.0.1:8000/"],  # React dev server, heroku hosting
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -115,5 +104,5 @@ async def shutdown():
 # ✅ Run FastAPI (for local development)
 if __name__ == "__main__":
     import uvicorn  # type: ignore
-    uvicorn.run(app, host="127.0.0.1", port=8001, reload=True)
+    uvicorn.run(app, host="127.0.0.1", port=8000, reload=True)
 print("main.py ran successfully")

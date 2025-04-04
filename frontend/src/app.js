@@ -22,7 +22,7 @@ function App() {
       setLoading(true);
       setMessage(text); // Set message state for example buttons
       const response = await fetch(
-        "https://lc-security-backend-d51e9de3f86b.herokuapp.com/predict",
+        "https://szakdolgozat-nh9z.onrender.com/predict",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
