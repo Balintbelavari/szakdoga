@@ -82,15 +82,8 @@ async def predict(message: Message):
         result = {
             "message": message.message,
             "prediction": prediction,
-            "timestamp": datetime.now().isoformat()
         }
         await db.predictions.insert_one(result)
-        
-        # Update Google Sheet
-        data = await collection.find({}, {"_id": 0, "message": 1, "prediction": 1}).to_list(length=None)
-        formatted_data = [["Message", "Prediction"]]  # Header row
-        new_row = [message.message, prediction]
-        sheet.append_row(new_row)
 
         return {"prediction": prediction}
     except Exception as e:
