@@ -1,0 +1,39 @@
+# Ignore node_modules directory
+frontend/node_modules/
+node_modules/
+app/node_modules/
+
+# Ignore log files
+*.log
+
+# Ignore environment variable files
+**/.env
+**/.env.save
+
+# Ignore build directories
+dist/
+
+# Ignore temporary files
+*.tmp
+*.swp
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE specific files
+.vscode/
+.idea/
+*.iml
+
+# Ignore Python bytecode cache directories
+__pycache__/
+backend/__pycache__/
+backend/app/__pycache__
+
+# Ignore Google Cloud Storage json key
+**/lcsecurity-feb78c25475c.json
+**/lcsecurity-f65f63473db7.json
+
+# Ignore encryption key
+**/encrypt.py
