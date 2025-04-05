@@ -48,9 +48,9 @@ app.add_middleware(
 )
 
 # Serve frontend
-FRONTEND_PATH = Path(__file__).parent.parent / "frontend" / "build"
-if FRONTEND_PATH.exists():
-    app.mount("/static", StaticFiles(directory=FRONTEND_PATH / "static"), name="static")
+FRONTEND_BUILD_PATH = Path(__file__).parent.parent / "frontend" / "build"
+if FRONTEND_BUILD_PATH.exists():
+    app.mount("/", StaticFiles(directory=FRONTEND_BUILD_PATH, html=True), name="frontend")
 
 @app.get("/")
 async def serve_frontend():
