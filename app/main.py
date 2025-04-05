@@ -26,7 +26,6 @@ secret_key = os.getenv("SECRET_KEY")
 encrypted_mongo_uri = os.getenv("MONGO_URI_ENCRYPTED")
 
 # Serve frontend
-frontend_build_path = os.getenv("FRONTEND_BUILD_PATH")
 if frontend_build_path.exists():
     app.mount("/", StaticFiles(directory=frontend_build_path, html=True), name="frontend")
 
