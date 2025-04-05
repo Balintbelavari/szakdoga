@@ -21,7 +21,8 @@ logger = logging.getLogger(__name__)
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
-frontend_build_path = Path(os.getenv("FRONTEND_BUILD_PATH", "../frontend/build")).resolve()
+frontend_build_path = Path(os.getenv("FRONTEND_BUILD_PATH", "../frontend/build")) # Default to "../frontend/build" if not set
+print(frontend_build_path)
 secret_key = os.getenv("SECRET_KEY")
 encrypted_mongo_uri = os.getenv("MONGO_URI_ENCRYPTED")
 
@@ -33,7 +34,7 @@ if frontend_build_path.exists():
 if not secret_key or not encrypted_mongo_uri or not frontend_build_path:
     raise ValueError("Missing SECRET_KEY or MONGO_URI_ENCRYPTED or FRONTEND_BUILD_PATH in .env file")
 
-fernet = Fernet(secret_key.encode())
+fernet = Fernet(secret_key.encode()) # Fernet key must be bytes
 mongo_uri = fernet.decrypt(encrypted_mongo_uri.encode()).decode()
 client = AsyncIOMotorClient(mongo_uri)
 db = client["szakdolgozat"]
