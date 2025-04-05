@@ -74,6 +74,9 @@ async def predict(message: Message):
     except Exception as e:
         logger.error(f"Prediction failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Prediction failed")
+    
+if frontend_build_path.exists():
+    app.mount("/", StaticFiles(directory=frontend_build_path, html=True), name="root")
 
 @app.on_event("startup")
 async def startup():
