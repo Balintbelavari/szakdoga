@@ -10,8 +10,6 @@ from datetime import datetime
 from dotenv import load_dotenv  # type: ignore
 import os
 import pymongo # type: ignore
-import gspread # type: ignore
-from google.oauth2 import service_account # type: ignore
 import base64
 import json
 from cryptography.fernet import Fernet  # type: ignore
