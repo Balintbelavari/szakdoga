@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./app.css";
-import logo from "./assets/lc_security_logo.png";
+import logo from "./assets/bb_logo_w.png";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -51,8 +51,7 @@ function App() {
   return (
     <div className="container">
       <div className="header">
-        <img src={logo} alt="LC Security Logo" className="logo" />
-        <span className="header-text">LC Security</span>
+        <img src={logo} alt="Logo" className="logo" />
       </div>
       <h1>
         Is it a <span className="highlight">scam</span>?
@@ -90,7 +89,10 @@ function App() {
       {loading && <p>Loading...</p>}
       {prediction && (
         <p className="prediction">
-          Prediction: <strong>{prediction}</strong>
+          Prediction:{" "}
+          <strong>
+            {prediction === "spam" ? " potentially harmful 🚨" : " safe ✅"}
+          </strong>
         </p>
       )}
       {error && <p className="error">{error}</p>}
@@ -112,11 +114,6 @@ function App() {
             Your membership expires in 10 days.
           </button>
         </div>
-      </div>
-
-      {/* Version Section */}
-      <div className="version-container">
-        <p className="version-label">Model Version: 0.1.1</p>
       </div>
     </div>
   );

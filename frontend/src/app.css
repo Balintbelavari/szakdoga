@@ -6,9 +6,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(90deg, #2f2744, #634783);
+    background: linear-gradient(0deg, #4682B4, #4667b4);
     font-family: 'Roboto', sans-serif;
-    color: white;
+    color: black;
 }
 
 #root {
@@ -29,10 +29,9 @@ body {
 }
 
 .logo {
-    width: 40px;
-    height: auto;
-    margin-right: 10px;
-    padding-bottom: 5px;
+    height: 60px;
+    width: auto;
+    margin-bottom: 100px;
 }
 
 .header-text {
@@ -52,7 +51,7 @@ h1 {
 }
 
 .highlight {
-    color: #f34674;
+    color: #ffa700;
 }
 
 
@@ -93,7 +92,7 @@ textarea {
 }
 
 button {
-    background: #f34674;
+    background: #ffa700;
     color: white;
     border: none;
     border-radius: 10px;
@@ -104,27 +103,28 @@ button {
 }
 
 button:hover {
-    background: #d93a65;
+    background: #ff8100;
 }
 
 .prediction {
     margin-top: 20px;
     font-size: 18px;
-    color: white;
+    color: #ffa700;
+    font-weight: bold;
 }
 
 .prediction strong {
-    color: #f34674;
+    color: white;
 }
 
 .error {
     margin-top: 20px;
-    color: #f34674;
+    color: #ff8100;
 }
 
 /* Example Buttons Section */
 .example-container {
-    margin-top: 20px;
+    margin-top: 100px;
     margin-left: auto;
     margin-right: auto;
     max-width: 620px;
@@ -133,7 +133,7 @@ button:hover {
 
 .example-title {
     font-size: 18px;
-    font-weight: 500;
+    font-weight: bold;
     color: white;
     margin-top: 40px;
     margin-bottom: 20px;
@@ -163,7 +163,7 @@ button:hover {
 
 .example-button:hover {
     background: white;
-    color: #2f2744;
+    color: #ff8100;
 }
 
 /* Responsive adjustments */
@@ -175,18 +175,4 @@ button:hover {
     .example-container {
         width: 90%;
     }
-}
-
-.version-container {
-    margin-top: 100px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    max-width: 600px;
-}
-
-.version-label {
-    font-size: 12px;
-    color: white;
-    text-align: center;
 }
