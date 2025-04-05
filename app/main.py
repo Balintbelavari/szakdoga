@@ -11,6 +11,8 @@ import os
 from pathlib import Path
 import logging
 
+app = FastAPI()
+
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -18,10 +20,19 @@ logger = logging.getLogger(__name__)
 # Load environment variables
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
+
+frontend_build_path = Path(os.getenv("FRONTEND_BUILD_PATH", "../frontend/build")).resolve()
 secret_key = os.getenv("SECRET_KEY")
 encrypted_mongo_uri = os.getenv("MONGO_URI_ENCRYPTED")
-if not secret_key or not encrypted_mongo_uri:
-    raise ValueError("Missing SECRET_KEY or MONGO_URI_ENCRYPTED")
+
+# Serve frontend
+frontend_build_path = os.getenv("FRONTEND_BUILD_PATH")
+if frontend_build_path.exists():
+    app.mount("/", StaticFiles(directory=frontend_build_path, html=True), name="frontend")
+
+# Check if the environment variables are set
+if not secret_key or not encrypted_mongo_uri or not frontend_build_path:
+    raise ValueError("Missing SECRET_KEY or MONGO_URI_ENCRYPTED or FRONTEND_BUILD_PATH in .env file")
 
 fernet = Fernet(secret_key.encode())
 mongo_uri = fernet.decrypt(encrypted_mongo_uri.encode()).decode()
@@ -36,32 +47,14 @@ except FileNotFoundError as e:
     logger.critical(f"Model file not found: {e}")
     raise RuntimeError("Failed to load ML models")
 
-app = FastAPI()
-
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://szakdolgozat-nh9z.onrender.com"],
-    allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type"],
+    allow_origins=["http://localhost:3000", "https://szakdolgozat-nh9z.onrender.com", "http://127.0.0.1:8000"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
     allow_credentials=True,
 )
-
-# Serve frontend
-FRONTEND_BUILD_PATH = Path(__file__).parent.parent / "frontend" / "build"
-if FRONTEND_BUILD_PATH.exists():
-    app.mount("/", StaticFiles(directory=FRONTEND_BUILD_PATH, html=True), name="frontend")
-
-@app.get("/")
-async def serve_frontend():
-    index_path = FRONTEND_BUILD_PATH / "index.html"
-    if index_path.exists():
-        return FileResponse(index_path)
-    return {"error": "Frontend build not found"}
-
-@app.get("/api")
-def read_root():
-    return {"message": "Welcome to the Scam/Ham Prediction API"}
 
 class Message(BaseModel):
     message: str
