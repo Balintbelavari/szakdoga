@@ -7,6 +7,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import joblib
 from dotenv import load_dotenv
 from cryptography.fernet import Fernet
+from datetime import datetime
 import os
 from pathlib import Path
 import logging
@@ -21,14 +22,9 @@ logger = logging.getLogger(__name__)
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
-frontend_build_path = Path(os.getenv("FRONTEND_BUILD_PATH", "../frontend/build")) # Default to "../frontend/build" if not set
-print(frontend_build_path)
+frontend_build_path = Path(os.getenv("FRONTEND_BUILD_PATH")) # Default to "../frontend/build" if not set
 secret_key = os.getenv("SECRET_KEY")
 encrypted_mongo_uri = os.getenv("MONGO_URI_ENCRYPTED")
-
-# Serve frontend
-if frontend_build_path.exists():
-    app.mount("/", StaticFiles(directory=frontend_build_path, html=True), name="frontend")
 
 # Check if the environment variables are set
 if not secret_key or not encrypted_mongo_uri or not frontend_build_path:
@@ -38,6 +34,7 @@ fernet = Fernet(secret_key.encode()) # Fernet key must be bytes
 mongo_uri = fernet.decrypt(encrypted_mongo_uri.encode()).decode()
 client = AsyncIOMotorClient(mongo_uri)
 db = client["szakdolgozat"]
+collection = db["predictions"]
 
 # Load models
 try:
@@ -58,13 +55,20 @@ app.add_middleware(
 
 class Message(BaseModel):
     message: str
+    
+@app.get("/")
+async def serve_frontend():
+    index_path = frontend_build_path / "index.html"
+    if index_path.exists():
+        return FileResponse(index_path)
+    return {"error": "Frontend build not found"}
 
 @app.post("/predict")
 async def predict(message: Message):
     try:
         message_bow = vectorizer.transform([message.message])
         prediction = model.predict(message_bow)[0]
-        result = {"message": message.message, "prediction": prediction}
+        result = {"message": message.message, "prediction": prediction, "timestamp": datetime.now().isoformat()}
         await db.predictions.insert_one(result)
         return {"prediction": prediction}
     except Exception as e:

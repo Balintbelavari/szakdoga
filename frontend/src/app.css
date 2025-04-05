@@ -9,7 +9,7 @@ body {
     align-items: center;
     background: linear-gradient(0deg, #4682B4, #4667b4);
     font-family: 'Roboto', sans-serif;
-    color: black;
+    color: #ffa700;
 }
 
 #root {
@@ -120,7 +120,7 @@ button:hover {
 
 .error {
     margin-top: 20px;
-    color: #ff8100;
+    color: #ffa700;
 }
 
 /* Example Buttons Section */
