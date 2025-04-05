@@ -1,4 +1,3 @@
-import logging
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -6,10 +5,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 import joblib
-from pathlib import Path
 from dotenv import load_dotenv
-import os
 from cryptography.fernet import Fernet
+import os
+from pathlib import Path
+import logging
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -54,7 +54,7 @@ if FRONTEND_BUILD_PATH.exists():
 
 @app.get("/")
 async def serve_frontend():
-    index_path = FRONTEND_PATH / "index.html"
+    index_path = FRONTEND_BUILD_PATH / "index.html"
     if index_path.exists():
         return FileResponse(index_path)
     return {"error": "Frontend build not found"}
