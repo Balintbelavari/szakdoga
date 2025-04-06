@@ -1,11 +1,9 @@
 body {
     margin: 0;
     padding: 0;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     background: linear-gradient(0deg, #4682B4, #4667b4);
     font-family: 'Roboto', sans-serif;
@@ -32,7 +30,8 @@ body {
 .logo {
     height: 60px;
     width: auto;
-    margin-bottom: 100px;
+    margin-bottom: 150px;
+    margin-top: 40px;
 }
 
 .header-text {
@@ -73,13 +72,10 @@ h1 {
     .input-container {
         width: 90%;
     }
-    textarea {
-        max-width: 80%;
-    }
 }
 
 textarea {
-    width: 90%;
+    width: 98%;
     min-height: 20px;
     max-height: 160px; /* 8 lines max */
     overflow-y: auto;
@@ -125,7 +121,7 @@ button:hover {
 
 /* Example Buttons Section */
 .example-container {
-    margin-top: 100px;
+    margin-top: 50px;
     margin-left: auto;
     margin-right: auto;
     max-width: 620px;
@@ -172,9 +168,6 @@ button:hover {
     .example-button {
         margin-left: auto;
         margin-right: auto;
-    }
-    .example-container {
-        width: 90%;
     }
 }
 

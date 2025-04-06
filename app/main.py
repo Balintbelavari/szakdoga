@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
-frontend_build_path = Path(os.getenv("FRONTEND_BUILD_PATH")) # Default to "../frontend/build" if not set
+frontend_build_path = Path(os.getenv("FRONTEND_BUILD_PATH"))
 secret_key = os.getenv("SECRET_KEY")
 encrypted_mongo_uri = os.getenv("MONGO_URI_ENCRYPTED")
 
@@ -59,6 +59,7 @@ class Message(BaseModel):
 @app.get("/")
 async def serve_frontend():
     index_path = frontend_build_path / "index.html"
+    print(index_path)
     if index_path.exists():
         return FileResponse(index_path)
     return {"error": "Frontend build not found"}
@@ -77,6 +78,7 @@ async def predict(message: Message):
     
 if frontend_build_path.exists():
     app.mount("/", StaticFiles(directory=frontend_build_path, html=True), name="root")
+    app.mount("/static", StaticFiles(directory=frontend_build_path / "static"), name="static")
 
 @app.on_event("startup")
 async def startup():
