@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.1b7f64eb.css",
+    "main.css": "/static/css/main.adc1cca0.css",
     "main.js": "/static/js/main.746c3643.js",
     "static/media/bb_logo_w.png": "/static/media/bb_logo_w.4b2ed4fd186347acc1ab.png",
     "index.html": "/index.html",
-    "main.1b7f64eb.css.map": "/static/css/main.1b7f64eb.css.map",
+    "main.adc1cca0.css.map": "/static/css/main.adc1cca0.css.map",
     "main.746c3643.js.map": "/static/js/main.746c3643.js.map"
   },
   "entrypoints": [
-    "static/css/main.1b7f64eb.css",
+    "static/css/main.adc1cca0.css",
     "static/js/main.746c3643.js"
   ]
 }
