@@ -4,7 +4,9 @@ import logo from "./assets/bb_logo_w.png";
 
 function App() {
   const [message, setMessage] = useState("");
+  const [cleanedMessage, setCleanedMessage] = useState("");
   const [prediction, setPrediction] = useState("");
+  const [confidence, setConfidence] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -19,6 +21,8 @@ function App() {
     try {
       setError("");
       setPrediction("");
+      setCleanedMessage("");
+      setConfidence(null);
       setLoading(true);
       setMessage(text); // Set message state for example buttons
       const response = await fetch(
@@ -41,6 +45,8 @@ function App() {
 
       const data = await response.json();
       setPrediction(data.prediction);
+      setCleanedMessage(data.cleaned_message);
+      setConfidence(data.confidence);
     } catch (err) {
       setError("Error: " + err.message);
     } finally {
@@ -88,12 +94,23 @@ function App() {
       </div>
       {loading && <p>Loading...</p>}
       {prediction && (
-        <p className="prediction">
-          Prediction:{" "}
-          <strong>
-            {prediction === "spam" ? " potentially harmful 🚨" : " safe ✅"}
-          </strong>
-        </p>
+        <div className="results">
+          <p>
+            <strong>Input Text:</strong> {message}
+          </p>
+          <h2>Results</h2>
+          <p>
+            <strong>Prediction:</strong>{" "}
+            {prediction === "spam" ? "Potentially Harmful 🚨" : "Safe ✅"}
+          </p>
+          <p>
+            <strong>Confidence:</strong>{" "}
+            {confidence ? `${(confidence * 100).toFixed(2)}%` : "N/A"}
+          </p>
+          <p>
+            <strong>Cleaned Text:</strong> {cleanedMessage || "N/A"}
+          </p>
+        </div>
       )}
       {error && <p className="error">{error}</p>}
 

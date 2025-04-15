@@ -124,6 +124,7 @@ button:hover {
     margin-top: 50px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 50px;
     max-width: 620px;
     width: 100%; /* Ensure it takes up full width of the parent */
 }
@@ -187,3 +188,38 @@ button:hover {
     text-align: center;
     padding: 20px;
   }
+
+  .results {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .results h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #ffa700;
+  }
+  
+  .results p {
+    margin: 5px 0;
+    color: white;
+  }
+
+  .results p strong {
+    margin: 5px 0;
+    color: #ffa700;
+  }
+
+  /* Responsive adjustments */
+@media (max-width: 750px) { /* Phones */
+    .input-.results {
+        width: 90%;
+    }
+}

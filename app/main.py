@@ -11,6 +11,8 @@ from datetime import datetime
 import os
 from pathlib import Path
 import logging
+import spacy
+import numpy as np
 
 app = FastAPI()
 
@@ -44,6 +46,19 @@ except FileNotFoundError as e:
     logger.critical(f"Model file not found: {e}")
     raise RuntimeError("Failed to load ML models")
 
+def clean_text_spacy(text: str) -> str:
+    doc = nlp(text.lower())
+    tokens = [
+        token.lemma_ for token in doc
+        if not token.is_stop
+        and not token.is_punct
+        and not token.like_num
+        and not token.like_url
+        and not token.is_space
+        and token.lemma_ != '-PRON-'
+    ]
+    return ' '.join(tokens)
+
 # CORS
 app.add_middleware(
     CORSMiddleware,
@@ -54,8 +69,8 @@ app.add_middleware(
 )
 
 class Message(BaseModel):
-    message: str
-    
+    message: str    
+
 @app.get("/")
 async def serve_frontend():
     index_path = frontend_build_path / "index.html"
@@ -67,11 +82,24 @@ async def serve_frontend():
 @app.post("/predict")
 async def predict(message: Message):
     try:
-        message_bow = vectorizer.transform([message.message])
+        cleaned_message = clean_text_spacy(message.message)
+        message_bow = vectorizer.transform([cleaned_message])
         prediction = model.predict(message_bow)[0]
-        result = {"message": message.message, "prediction": prediction, "timestamp": datetime.now().isoformat()}
+        confidence = float(np.max(model.predict_proba(message_bow)[0]))
+        result = {
+            "message": message.message,
+            "cleaned_message": cleaned_message,
+            "prediction": prediction,
+            "confidence": confidence,
+            "timestamp": datetime.now().isoformat()
+        }
         await db.predictions.insert_one(result)
-        return {"prediction": prediction}
+        return {
+            "message": message.message,
+            "cleaned_message": cleaned_message,
+            "prediction": prediction,
+            "confidence": confidence
+        }
     except Exception as e:
         logger.error(f"Prediction failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Prediction failed")
@@ -82,6 +110,21 @@ if frontend_build_path.exists():
 
 @app.on_event("startup")
 async def startup():
+    import subprocess
+    import importlib
+
+    try:
+        # Try to import the model
+        importlib.import_module("en_core_web_sm")
+    except ImportError:
+        # If not installed, download it
+        logger.info("Downloading spaCy model 'en_core_web_sm'...")
+        subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"], check=True)
+
+    global nlp
+    import en_core_web_sm # type: ignore
+    nlp = en_core_web_sm.load()
+
     await client.admin.command("ping")
     logger.info("MongoDB connected")
 
