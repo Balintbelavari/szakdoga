@@ -106,12 +106,17 @@ button:hover {
 .prediction {
     margin-top: 20px;
     font-size: 18px;
-    color: #ffa700;
+    color: white;
     font-weight: bold;
+    text-align: left;
 }
 
-.prediction strong {
-    color: white;
+.prediction-label {
+    color: #ffa700;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 20px;
+    text-align: right;
 }
 
 .error {
@@ -199,6 +204,7 @@ button:hover {
     border-radius: 5px;
     width: 100%;
     max-width: 600px;
+    width: 100%;
   }
   
   .results h2 {
@@ -215,6 +221,10 @@ button:hover {
   .results p strong {
     margin: 5px 0;
     color: #ffa700;
+  }
+
+  .results td{
+    width: 50%;
   }
 
   /* Responsive adjustments */

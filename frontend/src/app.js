@@ -4,6 +4,7 @@ import logo from "./assets/bb_logo_w.png";
 
 function App() {
   const [message, setMessage] = useState("");
+  const [lastCheckedMessage, setLastCheckedMessage] = useState("");
   const [cleanedMessage, setCleanedMessage] = useState("");
   const [prediction, setPrediction] = useState("");
   const [confidence, setConfidence] = useState(null);
@@ -23,8 +24,9 @@ function App() {
       setPrediction("");
       setCleanedMessage("");
       setConfidence(null);
+      setLastCheckedMessage(text); // Store the checked message
       setLoading(true);
-      setMessage(text); // Set message state for example buttons
+      setMessage(text); // Update textarea for example buttons
       const response = await fetch(
         "https://szakdolgozat-nh9z.onrender.com/predict",
         {
@@ -95,21 +97,20 @@ function App() {
       {loading && <p>Loading...</p>}
       {prediction && (
         <div className="results">
-          <p>
-            <strong>Input Text:</strong> {message}
-          </p>
-          <h2>Results</h2>
-          <p>
-            <strong>Prediction:</strong>{" "}
-            {prediction === "spam" ? "Potentially Harmful 🚨" : "Safe ✅"}
-          </p>
-          <p>
-            <strong>Confidence:</strong>{" "}
-            {confidence ? `${(confidence * 100).toFixed(2)}%` : "N/A"}
-          </p>
-          <p>
-            <strong>Cleaned Text:</strong> {cleanedMessage || "N/A"}
-          </p>
+          <table>
+            <tr>
+              <td className="prediction-label">Prediction:</td>
+              <td className="prediction">
+                {prediction === "spam" ? "Harmful 🚨" : "Safe ✅"}
+              </td>
+            </tr>
+            <tr>
+              <td className="prediction-label">Confidence: </td>
+              <td className="prediction">
+                {confidence ? `${(confidence * 100).toFixed(2)}%` : "N/A"}
+              </td>
+            </tr>
+          </table>
         </div>
       )}
       {error && <p className="error">{error}</p>}

@@ -74,7 +74,6 @@ class Message(BaseModel):
 @app.get("/")
 async def serve_frontend():
     index_path = frontend_build_path / "index.html"
-    print(index_path)
     if index_path.exists():
         return FileResponse(index_path)
     return {"error": "Frontend build not found"}
