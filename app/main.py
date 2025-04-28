@@ -40,8 +40,8 @@ collection = db["predictions"]
 
 # Load models
 try:
-    model = joblib.load(BASE_DIR / "model.pkl")
-    vectorizer = joblib.load(BASE_DIR / "vectorizer.pkl")
+    model = joblib.load(BASE_DIR / "model_combined.pkl")
+    vectorizer = joblib.load(BASE_DIR / "vectorizer_combined.pkl")
 except FileNotFoundError as e:
     logger.critical(f"Model file not found: {e}")
     raise RuntimeError("Failed to load ML models")
